@@ -45,12 +45,12 @@ extension Ariel {
 
         for property in Mirror(reflecting: self).children {
             guard let identifier = property.label,
-                  let subView = property.value as? UIView else {
+                  let view = property.value as? UIView else {
                 continue
             }
-            views[identifier] = subView
-            subView.accessibilityIdentifier = identifier
-            subView.translatesAutoresizingMaskIntoConstraints = false
+            views[identifier] = view
+            view.accessibilityIdentifier = identifier
+            view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
 }
