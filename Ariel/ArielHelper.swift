@@ -35,7 +35,7 @@ public extension UIView {
     public func edges(equal item: UIView, insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
         return zip(
                 [NSLayoutAttribute.top, .trailing, .bottom, .leading],
-                [insets.top, insets.right, insets.bottom, insets.left])
+                [insets.top, -insets.right, -insets.bottom, insets.left])
                 .map {
                     attribute, constant in
                     return align(attribute, offset: constant, with: item)
