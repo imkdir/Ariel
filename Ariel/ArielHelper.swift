@@ -80,11 +80,14 @@ public extension UIView {
                 let multiplier = multipliers[index]
 
                 var attrs: [NSLayoutAttribute]
+                var oppositeAxis: UILayoutConstraintAxis
 
                 if case .horizontal = axis {
                     attrs = [.leading, .width, .trailing]
+                    oppositeAxis = .vertical
                 } else {
                     attrs = [.top, .height, .bottom]
+                    oppositeAxis = .horizontal
                 }
 
                 var constraints: [NSLayoutConstraint] = []
@@ -105,7 +108,7 @@ public extension UIView {
                 }
 
                 constraints.append(item.scale(attrs[1], by: multiplier, to: (self, attrs[1])))
-                constraints.append(contentsOf: item.fill(on: axis))
+                constraints.append(contentsOf: item.fill(on: oppositeAxis))
 
                 return constraints
             })

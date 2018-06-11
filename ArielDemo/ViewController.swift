@@ -9,8 +9,17 @@
 import UIKit
 import Ariel
 
+extension UIColor {
+    static var random: UIColor {
+        let rd = { CGFloat(arc4random()%256)/256.0 }
+        return UIColor(red: rd(), green: rd(), blue: rd(), alpha: 1.0)
+    }
+}
+
 class ViewController: ArielViewController {
 
+    var boxes: [UIView] = []
+    
     let labelName = UILabel()
     let fieldName = UITextField()
     let btnSignUp = UIButton()
@@ -19,6 +28,16 @@ class ViewController: ArielViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        for _ in 0 ... 5 {
+            let box = UIView()
+            box.backgroundColor = UIColor.random
+            boxes.append(box)
+            view.addSubview(box)
+            box.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        NSLayoutConstraint.activate(view.meanStack(views: boxes, on: .vertical))
 
         [labelName, fieldName, btnSignUp, btnLogIn, viewLogo].forEach(view.addSubview)
 
