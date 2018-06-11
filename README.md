@@ -149,3 +149,13 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
   ```
 
   
+
+#### Example
+
+```swift
+J(btnSignIn.align(.centerY, with: btnRegister))
+J(btnSignIn.match(.leading, with: (viewLogo, .centerX)))
+G(viewLogo.edges(equal: view, insets: .zero))
+G(btnSignIn.center(in: containerView))
+```
+

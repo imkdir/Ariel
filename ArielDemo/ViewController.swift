@@ -30,15 +30,15 @@ class ViewController: ArielViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        for _ in 0 ... 3 {
-//            let box = UIView()
-//            box.backgroundColor = UIColor.random
-//            boxes.append(box)
-//            view.addSubview(box)
-//            box.translatesAutoresizingMaskIntoConstraints = false
-//        }
-//        
-//        NSLayoutConstraint.activate(view.stack(views: boxes, on: .vertical)(0.4))
+        for _ in 0 ... 3 {
+            let box = UIView()
+            box.backgroundColor = UIColor.random
+            boxes.append(box)
+            view.addSubview(box)
+            box.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        NSLayoutConstraint.activate(view.stack(views: boxes, on: .vertical)(0.4))
 
         [labelName, btnCheck, fieldName, btnSignUp, btnLogIn, viewLogo].forEach(view.addSubview)
 
@@ -47,16 +47,16 @@ class ViewController: ArielViewController {
         btnCheck.setTitleColor(.black, for: [.normal])
         fieldName.borderStyle = .roundedRect
         
-//        btnSignUp.setTitle("Sign Up", for: [.normal])
-//        btnSignUp.setTitleColor(.black, for: [.normal])
-//        btnLogIn.setTitle("Log In", for: [.normal])
-//        btnLogIn.setTitleColor(.black, for: [.normal])
+        btnSignUp.setTitle("Sign Up", for: [.normal])
+        btnSignUp.setTitleColor(.black, for: [.normal])
+        btnLogIn.setTitle("Log In", for: [.normal])
+        btnLogIn.setTitleColor(.black, for: [.normal])
         
         viewLogo.backgroundColor = .red
         viewLogo.transform = CGAffineTransform.identity.rotated(by: .pi/4)
 
         H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
-//        { labelName <| fieldName |> btnCheck }
+        { labelName <| fieldName |> btnCheck }
         H("|-30-[btnSignUp]-40-[btnLogIn(btnSignUp)]-30-|")
         V("|-80-[labelName]-30-[btnSignUp]")
         J(labelName.align(.firstBaseline, with: fieldName))
