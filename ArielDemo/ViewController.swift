@@ -21,6 +21,7 @@ class ViewController: ArielViewController {
     var boxes: [UIView] = []
     
     let labelName = UILabel()
+    let btnCheck = UIButton()
     let fieldName = UITextField()
     let btnSignUp = UIButton()
     let btnLogIn = UIButton()
@@ -39,9 +40,11 @@ class ViewController: ArielViewController {
         
         NSLayoutConstraint.activate(view.meanStack(views: boxes, on: .vertical))
 
-        [labelName, fieldName, btnSignUp, btnLogIn, viewLogo].forEach(view.addSubview)
+        [labelName, btnCheck, fieldName, btnSignUp, btnLogIn, viewLogo].forEach(view.addSubview)
 
         labelName.text = "Name:"
+        btnCheck.setTitle("Check", for: [.normal])
+        btnCheck.setTitleColor(.black, for: [.normal])
         fieldName.borderStyle = .roundedRect
         
         btnSignUp.setTitle("Sign Up", for: [.normal])
@@ -52,10 +55,11 @@ class ViewController: ArielViewController {
         viewLogo.backgroundColor = .red
         viewLogo.transform = CGAffineTransform.identity.rotated(by: .pi/4)
 
-        H("|-20-[labelName]-20-[fieldName]-20-|") { labelName <| fieldName }
+        H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|") { labelName <| fieldName |> btnCheck }
         H("|-30-[btnSignUp]-40-[btnLogIn(btnSignUp)]-30-|")
         V("|-80-[labelName]-30-[btnSignUp]")
         J(labelName.align(.firstBaseline, with: fieldName))
+        J(labelName.align(.firstBaseline, with: btnCheck))
         J(btnSignUp.align(.centerY, with: btnLogIn))
         G(viewLogo.edges(equal: view, insets: UIEdgeInsets(top: 300, left: 150, bottom: 300, right: 150)))
     }

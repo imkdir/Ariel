@@ -120,14 +120,22 @@ public extension UIView {
     }
 }
 
-infix operator |>
-
-public func |>(lhs: UIView, rhs: UIView) {
-    lhs.setContentHuggingPriority(UILayoutPriority(rawValue: rhs.contentHuggingPriority(for: .horizontal).rawValue-1), for: .horizontal)
+precedencegroup LayoutPriorityGroup {
+    associativity: left
 }
 
-infix operator <|
+infix operator |> : LayoutPriorityGroup
 
-public func <|(lhs: UIView, rhs: UIView) {
+@discardableResult
+public func |>(lhs: UIView, rhs: UIView) -> UIView{
+    lhs.setContentHuggingPriority(UILayoutPriority(rawValue: rhs.contentHuggingPriority(for: .horizontal).rawValue-1), for: .horizontal)
+    return rhs
+}
+
+infix operator <| : LayoutPriorityGroup
+
+@discardableResult
+public func <|(lhs: UIView, rhs: UIView) -> UIView {
     lhs.setContentHuggingPriority(UILayoutPriority(rawValue: rhs.contentHuggingPriority(for: .horizontal).rawValue+1), for: .horizontal)
+    return rhs
 }
