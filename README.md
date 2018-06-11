@@ -91,7 +91,7 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 { labelName <| fieldName |> btnCheck } // line 2
 ```
 
-![Result](/Users/tung/Desktop/Ariel/Resources/example1.png)
+![Result](Resources/example1.png)
 
 ## Layout Methods on UIView
 
