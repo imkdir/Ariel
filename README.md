@@ -97,7 +97,7 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 
 
 
-####Methods return `NSLayoutConstraint`
+#### Methods return `NSLayoutConstraint`
 
 + **Align**: Same attributes of two items.
 
@@ -121,14 +121,14 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 
 
 
-####Methods return `[NSLayoutConstraint]`
+#### Methods return `[NSLayoutConstraint]`
 
 + center(in: UIView)
 + edges(equal: UIView, insets: UIEdgeInsets)
 
 
 
-####The Stack method
+#### The Stack method
 
 + The Signature
 
