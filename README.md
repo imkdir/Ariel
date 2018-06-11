@@ -60,7 +60,7 @@ NSLayoutConstraint.activate(
 
 
 
-## Introduce LayoutPriority Operator
+## Introduce ContentHuggingPriority Operator
 
 ```swift
 precedencegroup LayoutPriorityGroup {
