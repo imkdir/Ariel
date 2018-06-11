@@ -30,7 +30,7 @@ class ViewController: ArielViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for _ in 0 ... 5 {
+        for _ in 0 ... 3 {
             let box = UIView()
             box.backgroundColor = UIColor.random
             boxes.append(box)
@@ -38,7 +38,7 @@ class ViewController: ArielViewController {
             box.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        NSLayoutConstraint.activate(view.meanStack(views: boxes, on: .vertical))
+        NSLayoutConstraint.activate(view.stack(views: boxes, on: .horizontal)(0.1))
 
         [labelName, btnCheck, fieldName, btnSignUp, btnLogIn, viewLogo].forEach(view.addSubview)
 

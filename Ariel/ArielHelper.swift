@@ -70,9 +70,24 @@ public extension UIView {
         }
     }
 
-    public func stack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> ([CGFloat]) -> [NSLayoutConstraint] {
-        return { multipliers in
-
+    public func stack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> (CGFloat...) -> [NSLayoutConstraint] {
+        return { (stageIn: CGFloat...) in
+            
+            var multipliers: [CGFloat] = []
+            if stageIn.isEmpty {
+                multipliers = Array(repeating: 1.0/CGFloat(views.count), count: views.count)
+            } else if stageIn.count >= views.count {
+                multipliers = Array(stageIn[0..<views.count])
+            } else {
+                for i in 0 ..< stageIn.count {
+                    multipliers.append(stageIn[i])
+                }
+                let value = (1 - stageIn.reduce(0, +)) / CGFloat(views.count-stageIn.count)
+                
+                for _ in stageIn.count ..< views.count {
+                    multipliers.append(value)
+                }
+            }
             return Array(0 ..< views.count).flatMap({
                 index -> [NSLayoutConstraint] in
 
@@ -114,9 +129,9 @@ public extension UIView {
             })
         }
     }
-
-    public func meanStack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> [NSLayoutConstraint] {
-        return stack(views: views, margin: margin, padding: padding, on: axis)(Array(repeating: CGFloat(1.0/Double(views.count)), count: views.count))
+    
+    public func stack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> [NSLayoutConstraint] {
+        return stack(views: views, margin: margin, padding: padding, on: axis)()
     }
 }
 
