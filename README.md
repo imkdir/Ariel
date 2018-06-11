@@ -26,7 +26,7 @@ class ViewController : ArielViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-		view.addSubview(buttonSignIn)
+        view.addSubview(buttonSignIn)
         view.addSubview(buttonRegister)
         
         // setTitle, setTitleColor...
@@ -95,3 +95,49 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 
 ## Layout Methods on UIView
 
+####Methods return `NSLayoutConstraint`:
+
++ **Align**: Same attributes of two items.
+
+  `align(NSLayoutAttribute, offset, with item: UIView) `
+
++ **Match**: Two attributes on same axis(but not identical) of two items.
+
+  `match(NSLayoutAttribute, offset, with target: (UIView, NSLayoutAttribute))`
+
++ **Scale**:  Width or height attributes relation between two items.
+
+  `scale(NSLayoutAttribute, by multiplier, to target: (UIView, NSLayoutAttribute)) `
+
++ **Aspect**: items own width-height ratio.
+
+  `aspect(ratio: CGFloat)`
+
++ **Set**: width or height to constant on item.
+
+  `set(NSLayoutAttribute, to constant: CGFloat)`
+
+####Methods return `[NSLayoutConstraint]`:
+
++ center(in: UIView)
++ edges(equal: UIView, insets: UIEdgeInsets)
+
+#### The Stack method
+
++ The Signature
+
+  `stack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> (CGFloat...) -> [NSLayoutConstraint] `
+
++ The `CGFloat...`
+
+  ```swif
+  // to stack subviews equally
+  view.stack(view.subviews, on: .vertical)
+  // to stack subviews based on proportions
+  view.stack(view.subviews, on: .vertical)(0.1, 0.2, 0.3)
+  // Notices:
+  // If proportions' count less than subviews' count, the remaining subviews divided equally with total of 0.4 (1-0.1-0.2-0.3)
+  // If proportions' count greater than subviews' count, the extras arguments is not used.
+  ```
+
+  

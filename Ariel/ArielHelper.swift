@@ -25,6 +25,10 @@ public extension UIView {
     public func aspect(ratio: CGFloat) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier: ratio, constant: 0.0)
     }
+    
+    public func set(_ attribute: NSLayoutAttribute, to constant: CGFloat) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: constant)
+    }
 
     // Convenience Methods
 
@@ -42,11 +46,7 @@ public extension UIView {
                 }
     }
 
-    public func set(_ attribute: NSLayoutAttribute, to constant: CGFloat) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: constant)
-    }
-
-    public func attach(to item: UIView, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
+    internal func attach(to item: UIView, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
         if case .horizontal = axis {
             return match(.leading, offset: padding, with: (item, .trailing))
         } else {
@@ -54,7 +54,7 @@ public extension UIView {
         }
     }
 
-    public func fill(on axis: UILayoutConstraintAxis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
+    internal func fill(on axis: UILayoutConstraintAxis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
         guard let superview = self.superview else { return [] }
 
         if case .horizontal = axis {
