@@ -139,8 +139,10 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
   ```swif
   // to stack subviews equally
   view.stack(view.subviews, on: .vertical)
+  
   // to stack subviews based on proportions
   view.stack(view.subviews, on: .vertical)(0.1, 0.2, 0.3)
+  
   // Notices:
   // If proportions' count less than subviews' count, the remaining subviews divided equally with total of 0.4 (1-0.1-0.2-0.3)
   // If proportions' count greater than subviews' count, the extras arguments is not used.
