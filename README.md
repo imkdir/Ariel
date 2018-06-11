@@ -122,7 +122,7 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 + center(in: UIView)
 + edges(equal: UIView, insets: UIEdgeInsets)
 
-#### The Stack method
+####The Stack method
 
 + The Signature
 
