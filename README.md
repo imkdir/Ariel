@@ -159,3 +159,5 @@ G(viewLogo.edges(equal: view, insets: .zero))
 G(btnSignIn.center(in: containerView))
 ```
 
+## Reference
+[Auto Layout Guide: Visual Format Language](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html#//apple_ref/doc/uid/TP40010853-CH27-SW1)
