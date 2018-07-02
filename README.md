@@ -101,15 +101,15 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 
 + **Align**: Same attributes of two items.
 
-  `align(NSLayoutAttribute, offset, with item: UIView) `
+  `align(_ attribute: NSLayoutAttribute, offset:CGFloat, with: UIView) `
 
 + **Match**: Two attributes on same axis(but not identical) of two items.
 
-  `match(NSLayoutAttribute, offset, with target: (UIView, NSLayoutAttribute))`
+  `match(_ attribute: NSLayoutAttribute, offset: CGFloat, with: (UIView, NSLayoutAttribute))`
 
 + **Scale**:  Width or height attributes relation between two items.
 
-  `scale(NSLayoutAttribute, by multiplier, to target: (UIView, NSLayoutAttribute)) `
+  `scale(_ attribute: NSLayoutAttribute, by multiplier: CGFloat, to: (UIView, NSLayoutAttribute)) `
 
 + **Aspect**: items own width-height ratio.
 
@@ -117,7 +117,7 @@ H("|-20-[labelName]-20-[fieldName]-10-[btnCheck]-20-|")
 
 + **Set**: width or height to constant on item.
 
-  `set(NSLayoutAttribute, to constant: CGFloat)`
+  `set(_ attribute: NSLayoutAttribute, to constant: CGFloat)`
 
 
 
