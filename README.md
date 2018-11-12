@@ -161,3 +161,6 @@ G(btnSignIn.center(in: containerView))
 
 ## Reference
 [Auto Layout Guide: Visual Format Language](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html#//apple_ref/doc/uid/TP40010853-CH27-SW1)
+
+## Resources
+[Auto Layout Demystified, 2nd Edition](http://a.co/d/4NAmOLs)
