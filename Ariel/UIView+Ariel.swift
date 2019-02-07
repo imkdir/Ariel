@@ -8,17 +8,17 @@ import UIKit
 
 public extension UIView {
 
-    // Basic Methods
+    //MARK: - Basic Methods
 
-    public func align(_ attribute: NSLayoutAttribute, offset: CGFloat = 0, with item: UIView) -> NSLayoutConstraint {
+    public func align(_ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, with item: UIView) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: item, attribute: attribute, multiplier: 1.0, constant: offset)
     }
 
-    public func match(_ attribute: NSLayoutAttribute, offset: CGFloat = 0, with target: (UIView, NSLayoutAttribute)) -> NSLayoutConstraint {
+    public func match(_ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, with target: (UIView, NSLayoutConstraint.Attribute)) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: target.0, attribute: target.1, multiplier: 1.0, constant: offset)
     }
 
-    public func scale(_ attribute: NSLayoutAttribute, by multiplier: CGFloat, to target: (UIView, NSLayoutAttribute)) -> NSLayoutConstraint {
+    public func scale(_ attribute: NSLayoutConstraint.Attribute, by multiplier: CGFloat, to target: (UIView, NSLayoutConstraint.Attribute)) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: target.0, attribute: target.1, multiplier: multiplier, constant: 0.0)
     }
 
@@ -26,7 +26,7 @@ public extension UIView {
         return NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier: ratio, constant: 0.0)
     }
     
-    public func set(_ attribute: NSLayoutAttribute, to constant: CGFloat) -> NSLayoutConstraint {
+    public func set(_ attribute: NSLayoutConstraint.Attribute, to constant: CGFloat) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: constant)
     }
 
@@ -38,7 +38,7 @@ public extension UIView {
 
     public func edges(equal item: UIView, insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
         return zip(
-                [NSLayoutAttribute.top, .trailing, .bottom, .leading],
+                [NSLayoutConstraint.Attribute.top, .trailing, .bottom, .leading],
                 [insets.top, -insets.right, -insets.bottom, insets.left])
                 .map {
                     attribute, constant in
@@ -46,15 +46,15 @@ public extension UIView {
                 }
     }
 
-    internal func attach(to item: UIView, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
-        if case .horizontal = axis {
+    func attach(to item: UIView, padding: CGFloat = 0, direction: NSLayoutConstraint.Axis) -> NSLayoutConstraint {
+        if case .horizontal = direction {
             return match(.leading, offset: padding, with: (item, .trailing))
         } else {
             return match(.top, offset: padding, with: (item, .bottom))
         }
     }
 
-    internal func fill(on axis: UILayoutConstraintAxis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
+    internal func fill(on axis: NSLayoutConstraint.Axis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
         guard let superview = self.superview else { return [] }
 
         if case .horizontal = axis {
@@ -70,12 +70,12 @@ public extension UIView {
         }
     }
 
-    public func stack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> (CGFloat...) -> [NSLayoutConstraint] {
+    public func stack(views: [UIView], direction: NSLayoutConstraint.Axis) -> (CGFloat...) -> [NSLayoutConstraint] {
         return { (stageIn: CGFloat...) in
             
             var multipliers: [CGFloat] = []
             if stageIn.isEmpty {
-                multipliers = Array(repeating: 1.0/CGFloat(views.count), count: views.count)
+                return views.map(direction: direction)
             } else if stageIn.count >= views.count {
                 multipliers = Array(stageIn[0..<views.count])
             } else {
@@ -94,10 +94,10 @@ public extension UIView {
                 let item = views[index]
                 let multiplier = multipliers[index]
 
-                var attrs: [NSLayoutAttribute]
-                var oppositeAxis: UILayoutConstraintAxis
+                var attrs: [NSLayoutConstraint.Attribute]
+                var oppositeAxis: NSLayoutConstraint.Axis
 
-                if case .horizontal = axis {
+                if case .horizontal = direction {
                     attrs = [.leading, .width, .trailing]
                     oppositeAxis = .vertical
                 } else {
@@ -108,18 +108,12 @@ public extension UIView {
                 var constraints: [NSLayoutConstraint] = []
 
                 if index == 0 {
-
-                    constraints.append(item.align(attrs[0], offset: margin, with: self))
-
+                    constraints.append(item.align(attrs[0], with: self))
                 } else if index == views.count-1 {
-
-                    constraints.append(self.align(attrs[2], offset: margin, with: item))
-
+                    constraints.append(self.align(attrs[2], with: item))
                 } else {
-
                     let prev = views[index-1]
-                    constraints.append(item.attach(to: prev, padding: padding, on: axis))
-
+                    constraints.append(item.attach(to: prev, direction: direction))
                 }
 
                 constraints.append(item.scale(attrs[1], by: multiplier, to: (self, attrs[1])))
@@ -129,28 +123,41 @@ public extension UIView {
             })
         }
     }
-    
-    public func stack(views: [UIView], margin: CGFloat = 0, padding: CGFloat = 0, on axis: UILayoutConstraintAxis) -> [NSLayoutConstraint] {
-        return stack(views: views, margin: margin, padding: padding, on: axis)()
+}
+
+extension Array where Element == UIView {
+    public func map(direction: NSLayoutConstraint.Axis, margin: CGSize = .zero, padding: CGFloat = 0) -> [NSLayoutConstraint] {
+        guard let first = first, let last = last, count > 1 else {
+            return []
+        }
+        guard let superview = first.superview else { return [] }
+        var constraints: [NSLayoutConstraint] = []
+        
+        switch direction {
+        case .horizontal:
+            forEach {
+                constraints.append($0.align(.top, offset: margin.height, with: superview))
+                constraints.append($0.align(.bottom, offset: -margin.height, with: superview))
+            }
+            constraints.append(first.align(.leading, offset: margin.width, with: superview))
+            dropFirst().enumerated().forEach { index, item in
+                constraints.append(item.attach(to: self[index], padding: padding, direction: direction))
+                constraints.append(item.align(.width, with: self[index]))
+            }
+            constraints.append(last.align(.trailing, offset: -margin.width, with: superview))
+        case .vertical:
+            forEach {
+                constraints.append($0.align(.leading, offset: margin.width, with: superview))
+                constraints.append($0.align(.trailing, offset: -margin.width, with: superview))
+            }
+            constraints.append(first.align(.top, offset: margin.height, with: superview))
+            dropFirst().enumerated().forEach { index, item in
+                constraints.append(item.attach(to: self[index], padding: padding, direction: direction))
+                constraints.append(item.align(.height, with: self[index]))
+            }
+            constraints.append(last.align(.bottom, offset: -margin.height, with: superview))
+        }
+        
+        return constraints
     }
-}
-
-precedencegroup LayoutPriorityGroup {
-    associativity: left
-}
-
-infix operator |> : LayoutPriorityGroup
-
-@discardableResult
-public func |>(lhs: UIView, rhs: UIView) -> UIView{
-    lhs.setContentHuggingPriority(UILayoutPriority(rawValue: rhs.contentHuggingPriority(for: .horizontal).rawValue-1), for: .horizontal)
-    return rhs
-}
-
-infix operator <| : LayoutPriorityGroup
-
-@discardableResult
-public func <|(lhs: UIView, rhs: UIView) -> UIView {
-    lhs.setContentHuggingPriority(UILayoutPriority(rawValue: rhs.contentHuggingPriority(for: .horizontal).rawValue+1), for: .horizontal)
-    return rhs
 }

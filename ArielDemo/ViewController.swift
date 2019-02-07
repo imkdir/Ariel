@@ -38,7 +38,7 @@ class ViewController: ArielViewController {
             box.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        NSLayoutConstraint.activate(view.stack(views: boxes, on: .vertical)(0.4))
+        NSLayoutConstraint.activate(boxes.map(direction: .horizontal, margin: .init(width: 8, height: 20), padding: 8))
 
         [labelName, btnCheck, fieldName, btnSignUp, btnLogIn, viewLogo].forEach(view.addSubview)
 

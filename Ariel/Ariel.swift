@@ -10,8 +10,8 @@ public protocol Ariel: class {
     var views: [String: Any] { get set }
     var metrics: [String: Any] { get set }
 
-    func H(_ format: String, block: ()->Void)
-    func V(_ format: String, block: ()->Void)
+    func H(_ format: String, options: NSLayoutConstraint.FormatOptions, block: ()->Void)
+    func V(_ format: String, options: NSLayoutConstraint.FormatOptions, block: ()->Void)
     func J(_ constraint: NSLayoutConstraint, priority: UILayoutPriority)
     func G(_ constraints: [NSLayoutConstraint])
 
@@ -20,21 +20,21 @@ public protocol Ariel: class {
 
 extension Ariel {
 
-    public func H(_ format: String, block: ()->Void = {}) {
+    public func H(_ format: String, options: NSLayoutConstraint.FormatOptions = [], block: ()->Void = {}) {
         NSLayoutConstraint.activate(
-            NSLayoutConstraint.constraints(withVisualFormat: "H:\(format)", metrics: metrics, views: views))
+            NSLayoutConstraint.constraints(withVisualFormat: "H:\(format)", options: options, metrics: metrics, views: views))
         block()
     }
 
-    public func V(_ format: String, block: ()->Void = {}) {
+    public func V(_ format: String, options: NSLayoutConstraint.FormatOptions = [], block: ()->Void = {}) {
         NSLayoutConstraint.activate(
-                NSLayoutConstraint.constraints(withVisualFormat: "V:\(format)", metrics: metrics, views: views))
+            NSLayoutConstraint.constraints(withVisualFormat: "V:\(format)", options: options, metrics: metrics, views: views))
         block()
     }
 
     public func J(_ constraint: NSLayoutConstraint, priority: UILayoutPriority = .required) {
         constraint.priority = priority
-        NSLayoutConstraint.activate([constraint])
+        constraint.isActive = true
     }
 
     public func G(_ constraints: [NSLayoutConstraint]) {

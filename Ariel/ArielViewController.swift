@@ -15,4 +15,13 @@ open class ArielViewController : UIViewController, Ariel {
         super.viewDidLoad()
         prepareForAutoLayout()
     }
+    
+    func add(child: UIViewController, name: String) {
+        addChild(child)
+        view.addSubview(child.view)
+        views[name] = child.view
+        child.view.accessibilityIdentifier = name
+        child.view.translatesAutoresizingMaskIntoConstraints = false
+        child.didMove(toParent: self)
+    }
 }
