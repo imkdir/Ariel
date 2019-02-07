@@ -54,7 +54,7 @@ public extension UIView {
         }
     }
 
-    internal func fill(on axis: NSLayoutConstraint.Axis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
+    public func fill(on axis: NSLayoutConstraint.Axis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
         guard let superview = self.superview else { return [] }
 
         if case .horizontal = axis {

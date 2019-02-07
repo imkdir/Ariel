@@ -16,7 +16,7 @@ open class ArielViewController : UIViewController, Ariel {
         prepareForAutoLayout()
     }
     
-    func add(child: UIViewController, name: String) {
+    public func add(child: UIViewController, name: String) {
         addChild(child)
         view.addSubview(child.view)
         views[name] = child.view
