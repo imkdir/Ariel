@@ -70,58 +70,56 @@ public extension UIView {
         }
     }
 
-    public func stack(views: [UIView], direction: NSLayoutConstraint.Axis) -> (CGFloat...) -> [NSLayoutConstraint] {
-        return { (stageIn: CGFloat...) in
-            
-            var multipliers: [CGFloat] = []
-            if stageIn.isEmpty {
-                return views.map(direction: direction)
-            } else if stageIn.count >= views.count {
-                multipliers = Array(stageIn[0..<views.count])
-            } else {
-                for i in 0 ..< stageIn.count {
-                    multipliers.append(stageIn[i])
-                }
-                let value = (1 - stageIn.reduce(0, +)) / CGFloat(views.count-stageIn.count)
-                
-                for _ in stageIn.count ..< views.count {
-                    multipliers.append(value)
-                }
+    public func stack(views: [UIView], direction: NSLayoutConstraint.Axis, proportion: [CGFloat]) -> [NSLayoutConstraint] {
+        var multipliers: [CGFloat] = []
+        
+        if proportion.isEmpty {
+            return views.map(direction: direction)
+        } else if proportion.count >= views.count {
+            multipliers = Array(proportion[0..<views.count])
+        } else {
+            for i in 0 ..< proportion.count {
+                multipliers.append(proportion[i])
             }
-            return Array(0 ..< views.count).flatMap({
-                index -> [NSLayoutConstraint] in
-
-                let item = views[index]
-                let multiplier = multipliers[index]
-
-                var attrs: [NSLayoutConstraint.Attribute]
-                var oppositeAxis: NSLayoutConstraint.Axis
-
-                if case .horizontal = direction {
-                    attrs = [.leading, .width, .trailing]
-                    oppositeAxis = .vertical
-                } else {
-                    attrs = [.top, .height, .bottom]
-                    oppositeAxis = .horizontal
-                }
-
-                var constraints: [NSLayoutConstraint] = []
-
-                if index == 0 {
-                    constraints.append(item.align(attrs[0], with: self))
-                } else if index == views.count-1 {
-                    constraints.append(self.align(attrs[2], with: item))
-                } else {
-                    let prev = views[index-1]
-                    constraints.append(item.attach(to: prev, direction: direction))
-                }
-
-                constraints.append(item.scale(attrs[1], by: multiplier, to: (self, attrs[1])))
-                constraints.append(contentsOf: item.fill(on: oppositeAxis))
-
-                return constraints
-            })
+            let value = (1 - proportion.reduce(0, +)) / CGFloat(views.count - proportion.count)
+            
+            for _ in proportion.count ..< views.count {
+                multipliers.append(value)
+            }
         }
+        return Array(0 ..< views.count).flatMap({
+            index -> [NSLayoutConstraint] in
+
+            let item = views[index]
+            let multiplier = multipliers[index]
+
+            var attrs: [NSLayoutConstraint.Attribute]
+            var oppositeAxis: NSLayoutConstraint.Axis
+
+            if case .horizontal = direction {
+                attrs = [.leading, .width, .trailing]
+                oppositeAxis = .vertical
+            } else {
+                attrs = [.top, .height, .bottom]
+                oppositeAxis = .horizontal
+            }
+
+            var constraints: [NSLayoutConstraint] = []
+
+            if index == 0 {
+                constraints.append(item.align(attrs[0], with: self))
+            } else if index == views.count-1 {
+                constraints.append(self.align(attrs[2], with: item))
+            } else {
+                let prev = views[index-1]
+                constraints.append(item.attach(to: prev, direction: direction))
+            }
+
+            constraints.append(item.scale(attrs[1], by: multiplier, to: (self, attrs[1])))
+            constraints.append(contentsOf: item.fill(on: oppositeAxis))
+
+            return constraints
+        })
     }
 }
 
