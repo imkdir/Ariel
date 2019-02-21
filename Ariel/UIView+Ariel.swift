@@ -124,7 +124,7 @@ public extension UIView {
 }
 
 extension Array where Element == UIView {
-    public func map(direction: NSLayoutConstraint.Axis, margin: CGSize = .zero, padding: CGFloat = 0) -> [NSLayoutConstraint] {
+    public func map(direction: NSLayoutConstraint.Axis, margin: CGSize = .zero, padding: CGFloat = 0, equally: Bool = true) -> [NSLayoutConstraint] {
         guard let first = first, let last = last, count > 1 else {
             return []
         }
@@ -140,7 +140,9 @@ extension Array where Element == UIView {
             constraints.append(first.align(.leading, offset: margin.width, with: superview))
             dropFirst().enumerated().forEach { index, item in
                 constraints.append(item.attach(to: self[index], padding: padding, direction: direction))
-                constraints.append(item.align(.width, with: self[index]))
+                if equally {
+                    constraints.append(item.align(.width, with: self[index]))
+                }
             }
             constraints.append(last.align(.trailing, offset: -margin.width, with: superview))
         case .vertical:
@@ -151,7 +153,9 @@ extension Array where Element == UIView {
             constraints.append(first.align(.top, offset: margin.height, with: superview))
             dropFirst().enumerated().forEach { index, item in
                 constraints.append(item.attach(to: self[index], padding: padding, direction: direction))
-                constraints.append(item.align(.height, with: self[index]))
+                if equally {
+                    constraints.append(item.align(.height, with: self[index]))
+                }
             }
             constraints.append(last.align(.bottom, offset: -margin.height, with: superview))
         }
