@@ -44,10 +44,8 @@ extension Ariel {
     public func prepareForAutoLayout() {
 
         for property in Mirror(reflecting: self).children {
-            guard let identifier = property.label,
-                  let view = property.value as? UIView else {
-                continue
-            }
+            guard let view = property.value as? UIView else { continue }
+            guard let identifier = property.label else { continue }
             views[identifier] = view
             view.accessibilityIdentifier = identifier
             view.translatesAutoresizingMaskIntoConstraints = false
