@@ -10,33 +10,33 @@ public extension UIView {
 
     //MARK: - Basic Methods
 
-    public func align(_ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, with item: UIView) -> NSLayoutConstraint {
+    func align(_ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, with item: UIView) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: item, attribute: attribute, multiplier: 1.0, constant: offset)
     }
 
-    public func match(_ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, with target: (UIView, NSLayoutConstraint.Attribute)) -> NSLayoutConstraint {
+    func match(_ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, with target: (UIView, NSLayoutConstraint.Attribute)) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: target.0, attribute: target.1, multiplier: 1.0, constant: offset)
     }
 
-    public func scale(_ attribute: NSLayoutConstraint.Attribute, by multiplier: CGFloat, to target: (UIView, NSLayoutConstraint.Attribute)) -> NSLayoutConstraint {
+    func scale(_ attribute: NSLayoutConstraint.Attribute, by multiplier: CGFloat, to target: (UIView, NSLayoutConstraint.Attribute)) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: target.0, attribute: target.1, multiplier: multiplier, constant: 0.0)
     }
 
-    public func aspect(ratio: CGFloat) -> NSLayoutConstraint {
+    func aspect(ratio: CGFloat) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: self, attribute: .height, multiplier: ratio, constant: 0.0)
     }
     
-    public func set(_ attribute: NSLayoutConstraint.Attribute, to constant: CGFloat) -> NSLayoutConstraint {
+    func set(_ attribute: NSLayoutConstraint.Attribute, to constant: CGFloat) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: constant)
     }
 
     // Convenience Methods
 
-    public func center(in item: UIView) -> [NSLayoutConstraint] {
+    func center(in item: UIView) -> [NSLayoutConstraint] {
         return [align(.centerX, with: item), align(.centerY, with: item)]
     }
 
-    public func edges(equal item: UIView, insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
+    func edges(equal item: UIView, insets: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
         return zip(
                 [NSLayoutConstraint.Attribute.top, .trailing, .bottom, .leading],
                 [insets.top, -insets.right, -insets.bottom, insets.left])
@@ -54,7 +54,7 @@ public extension UIView {
         }
     }
 
-    public func fill(on axis: NSLayoutConstraint.Axis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
+    func fill(on axis: NSLayoutConstraint.Axis, margin: CGFloat = 0) -> [NSLayoutConstraint] {
         guard let superview = self.superview else { return [] }
 
         if case .horizontal = axis {
@@ -70,7 +70,7 @@ public extension UIView {
         }
     }
 
-    public func stack(views: [UIView], direction: NSLayoutConstraint.Axis, proportion: [CGFloat]) -> [NSLayoutConstraint] {
+    func stack(views: [UIView], direction: NSLayoutConstraint.Axis, proportion: [CGFloat]) -> [NSLayoutConstraint] {
         var multipliers: [CGFloat] = []
         
         if proportion.isEmpty {
@@ -158,6 +158,8 @@ extension Array where Element == UIView {
                 }
             }
             constraints.append(last.align(.bottom, offset: -margin.height, with: superview))
+        @unknown default:
+            break
         }
         
         return constraints
